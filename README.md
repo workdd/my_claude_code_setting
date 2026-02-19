@@ -15,6 +15,8 @@ my_claude_code_setting/
 │       ├── server.py              # MCP 서버 구현
 │       ├── .mcp.json              # MCP 서버 설정 (API 키 환경변수 참조)
 │       └── requirements.txt       # Python 의존성
+├── tmux/
+│   └── tmux.conf                  # tmux 설정 (Shift+Enter, prefix=C-a, TPM 등)
 ├── settings.json                  # Claude Code 전역 설정 (hooks, permissions, plugins)
 ├── CLAUDE.md                      # 전역 Claude 지침 (홈 디렉토리에 배치)
 ├── install.sh                     # 자동 설치 스크립트
@@ -130,6 +132,38 @@ curl -fsSL https://raw.githubusercontent.com/mbrock/peon-ping/main/install.sh | 
 | `permissions.allow` | `["Bash(pkill:*)", "Bash(git commit:*)"]` | 자동 허용 커맨드 |
 
 > ⚠️ `skipDangerousModePermissionPrompt: true`는 개인 환경용 설정입니다. 공유 환경에서는 `false`로 변경 권장.
+
+## tmux 설정
+
+`tmux/tmux.conf` → `~/.tmux.conf` 에 설치됩니다 (`install.sh` 자동 처리).
+
+### 주요 설정
+
+| 기능 | 설정 |
+|------|------|
+| 프리픽스 | `Ctrl+A` (기본 `Ctrl+B` 대신) |
+| Shift+Enter | CSI-u 프로토콜로 Ghostty/xterm 지원 |
+| 창 분할 | `prefix + \|` 좌우, `prefix + -` 상하 |
+| 창 이동 | `prefix + h/j/k/l` (Vim 스타일) |
+| 4분할 이동 | `prefix + u/i/J/K` (고정 위치) |
+| 마우스 | 활성화 (`set -g mouse on`) |
+| 히스토리 | 10,000줄 |
+| 테마 | base16-tmux breadog |
+
+### TPM 플러그인 목록
+
+- `tmux-plugins/tmux-sensible` - 합리적인 기본값
+- `mattdavis90/base16-tmux` - breadog 테마
+
+### 신규 환경 설치 후
+
+```bash
+# tmux 실행 후 TPM으로 플러그인 설치
+tmux
+# prefix + I (대문자)
+```
+
+---
 
 ## API 키 관리
 

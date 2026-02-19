@@ -26,3 +26,6 @@ plugins/cache/
 # Never commit API keys
 plugins/**/.env
 plugins/**/api-keys*
+
+# tmux plugin manager (installed at runtime)
+tmux/plugins/

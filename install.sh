@@ -57,6 +57,25 @@ echo ""
 echo "  [!] API 키 설정 필요 (~/.api-keys.env 또는 환경변수):"
 echo "      export OPENROUTER_API_KEY=sk-or-..."
 
+# Install tmux config
+echo "[install] tmux config..."
+if [ -f "$HOME/.tmux.conf" ]; then
+    cp "$HOME/.tmux.conf" "$HOME/.tmux.conf.backup.$(date +%Y%m%d_%H%M%S)"
+    echo "  (backup created)"
+fi
+cp "$REPO_DIR/tmux/tmux.conf" "$HOME/.tmux.conf"
+echo "  ✓ ~/.tmux.conf"
+
+# Install TPM if not present
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    echo "  [!] TPM (Tmux Plugin Manager) 설치 중..."
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+    echo "  ✓ TPM 설치 완료"
+    echo "  [!] tmux 실행 후 prefix + I 로 플러그인 설치하세요"
+else
+    echo "  ✓ TPM 이미 설치됨"
+fi
+
 echo ""
 echo "==> Done! Restart Claude Code to apply changes."
 echo ""
