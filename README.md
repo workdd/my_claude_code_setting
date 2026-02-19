@@ -10,15 +10,47 @@ my_claude_code_setting/
 │   ├── frontend-designer.md       # UI/UX + 프론트엔드 전문 에이전트
 │   ├── backend.md                 # 백엔드 API/서버 전문 에이전트
 │   └── researcher.md              # 기술 리서치 + 문서화 전문 에이전트
-├── skills/                        # Anthropic 공식 Skills (agents에서 참조)
+├── skills/                        # Skills (agents에서 참조)
+│   │
+│   ├── [Anthropic Official]
 │   ├── frontend-design.md         # 프로덕션급 UI 설계 가이드
 │   ├── web-artifacts-builder.md   # React+Vite+Tailwind HTML 아티팩트 빌더
 │   ├── canvas-design.md           # PNG/PDF 비주얼 디자인
 │   ├── webapp-testing.md          # Playwright 웹앱 테스트
 │   ├── mcp-builder.md             # MCP 서버 개발 가이드
-│   ├── pdf.md                     # PDF 처리 (pypdf, pdfplumber, reportlab)
+│   ├── pdf.md                     # PDF 처리
 │   ├── docx.md                    # Word 문서 처리
-│   └── xlsx.md                    # Excel 스프레드시트 처리
+│   ├── xlsx.md                    # Excel 스프레드시트 처리
+│   │
+│   ├── [Jeffallan/claude-skills]
+│   ├── react-expert.md            # React 전문 가이드
+│   ├── nextjs-developer.md        # Next.js 개발 가이드
+│   ├── typescript-pro.md          # TypeScript 전문 가이드
+│   ├── playwright-expert.md       # Playwright E2E 테스트
+│   ├── vue-expert.md              # Vue 3 전문 가이드
+│   ├── javascript-pro.md          # JavaScript 전문 가이드
+│   ├── fastapi-expert.md          # FastAPI 백엔드 가이드
+│   ├── nestjs-expert.md           # NestJS 백엔드 가이드
+│   ├── api-designer.md            # API 설계 가이드
+│   ├── postgres-pro.md            # PostgreSQL 전문 가이드
+│   ├── python-pro.md              # Python 전문 가이드
+│   ├── graphql-architect.md       # GraphQL 아키텍처
+│   ├── microservices-architect.md # 마이크로서비스 아키텍처
+│   ├── secure-code-guardian.md    # 보안 코드 리뷰
+│   ├── test-master.md             # 테스트 전략 가이드
+│   ├── spec-miner.md              # 스펙 분석 가이드
+│   ├── code-documenter.md         # 코드 문서화 가이드
+│   ├── architecture-designer.md   # 아키텍처 설계 가이드
+│   ├── the-fool.md                # The Fool 탐색/창의 가이드
+│   │
+│   ├── [feiskyer/claude-code-settings]
+│   ├── codex-skill.md             # OpenAI Codex/GPT 코드 구현 ✅ 바로 사용
+│   ├── deep-research.md           # 멀티에이전트 심층 조사 ✅ 바로 사용
+│   ├── youtube-transcribe-skill.md # YouTube 자막 추출 ✅ 바로 사용
+│   ├── autonomous-skill.md        # 장시간 자율 작업 실행 ⚠️ 플러그인 설치 필요
+│   ├── kiro-skill.md              # 기능 개발 워크플로우 ⚠️ 플러그인 설치 필요
+│   ├── nanobanana-skill.md        # AI 이미지 생성 (Gemini) ⚠️ 플러그인 설치 필요
+│   └── spec-kit-skill.md          # 스펙 기반 개발 ⚠️ 플러그인 설치 필요
 ├── plugins/
 │   └── glm-assistant/             # 로컬 MCP 플러그인 (GLM-4.5-Air 무료 모델)
 │       ├── server.py              # MCP 서버 구현
@@ -26,6 +58,7 @@ my_claude_code_setting/
 │       └── requirements.txt       # Python 의존성
 ├── tmux/
 │   └── tmux.conf                  # tmux 설정 (Shift+Enter, prefix=C-a, TPM 등)
+├── statusline.sh                  # 상태바 스크립트 (모델/git/컨텍스트/비용 표시)
 ├── settings.json                  # Claude Code 전역 설정 (hooks, permissions, plugins)
 ├── CLAUDE.md                      # 전역 Claude 지침 (홈 디렉토리에 배치)
 ├── install.sh                     # 자동 설치 스크립트
@@ -66,14 +99,9 @@ cp CLAUDE.md ~/CLAUDE.md
 | `researcher` | `pdf`, `docx`, `xlsx` | `spec-miner`, `code-documenter`, `architecture-designer`, `the-fool` |
 
 Skills 출처:
-- [anthropics/skills](https://github.com/anthropics/skills) - `skills/` 디렉토리에 포함 (자동 설치)
-- [Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills) - 플러그인으로 별도 설치 필요
-
-```bash
-# jeffallan skills 설치 (Claude Code 내에서)
-/plugin marketplace add jeffallan/claude-skills
-/plugin install fullstack-dev-skills@jeffallan
-```
+- [anthropics/skills](https://github.com/anthropics/skills) — `skills/` 디렉토리에 포함 (자동 설치)
+- [Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills) — `skills/` 디렉토리에 포함 (자동 설치)
+- [feiskyer/claude-code-settings](https://github.com/feiskyer/claude-code-settings) — SKILL.md는 포함, 일부 플러그인 별도 설치 필요 (아래 참조)
 
 ---
 
@@ -107,6 +135,51 @@ UI/UX 디자인 및 프론트엔드 개발 전문 에이전트.
 - 기술 트렌드 및 경쟁사 분석
 
 ## 플러그인 설치
+
+### feiskyer/claude-code-settings 스킬 (일부 수동 설치 필요)
+
+`skills/` 디렉토리에 SKILL.md가 포함되어 있지만, 일부 스킬은 **헬퍼 스크립트 포함 전체 플러그인 설치**가 필요합니다.
+
+#### ✅ 바로 사용 가능 (SKILL.md만으로 동작)
+
+| 스킬 | 설명 | 사전 요구사항 |
+|------|------|------|
+| `codex-skill` | OpenAI Codex/GPT로 코드 자동 구현 | `codex` CLI 설치 필요: `npm install -g @openai/codex` |
+| `deep-research` | 멀티에이전트 심층 조사 워크플로우 | Firecrawl/Exa MCP 있으면 더 강력 (없어도 동작) |
+| `youtube-transcribe-skill` | YouTube 자막/트랜스크립트 추출 | `yt-dlp` (이미 설치됨) |
+
+#### ⚠️ 플러그인 설치 필요 (헬퍼 스크립트 포함)
+
+아래 스킬은 SKILL.md 외에 helper scripts/Python 파일이 있어 전체 기능을 위해 플러그인 설치가 필요합니다.
+
+**Claude Code 내에서 실행:**
+```
+/plugin marketplace add feiskyer/claude-code-settings
+```
+
+그 후 개별 설치:
+```
+/plugin install kiro-skill@feiskyer-claude-code-settings
+/plugin install autonomous-skill@feiskyer-claude-code-settings
+/plugin install spec-kit-skill@feiskyer-claude-code-settings
+/plugin install nanobanana-skill@feiskyer-claude-code-settings
+```
+
+| 스킬 | 설명 | 추가 요구사항 |
+|------|------|------|
+| `kiro-skill` | 요구사항→설계→태스크→구현 워크플로우 | 없음 |
+| `autonomous-skill` | 장시간 멀티세션 자율 작업 | 없음 |
+| `spec-kit-skill` | Spec-Kit 헌법 기반 스펙 주도 개발 | `specify` CLI 설치 필요 |
+| `nanobanana-skill` | Google Gemini API로 이미지 생성/편집 | `GOOGLE_API_KEY` 환경변수 필요 |
+
+**nanobanana-skill 추가 설정:**
+```bash
+# Google AI Studio에서 무료 API 키 발급: https://aistudio.google.com
+export GOOGLE_API_KEY=your-key-here
+pip install google-generativeai pillow
+```
+
+---
 
 ### claude-mem (크로스 세션 메모리) - 마켓플레이스
 
@@ -159,6 +232,7 @@ curl -fsSL https://raw.githubusercontent.com/mbrock/peon-ping/main/install.sh | 
 | `alwaysThinkingEnabled` | `true` | 확장 사고 항상 활성화 |
 | `skipDangerousModePermissionPrompt` | `true` | 위험 작업 확인 프롬프트 생략 |
 | `permissions.allow` | `["Bash(pkill:*)", "Bash(git commit:*)"]` | 자동 허용 커맨드 |
+| `statusLine` | `~/.claude/statusline.sh` | 하단 상태바: 모델·git·컨텍스트·비용·시간 표시 |
 
 > ⚠️ `skipDangerousModePermissionPrompt: true`는 개인 환경용 설정입니다. 공유 환경에서는 `false`로 변경 권장.
 
