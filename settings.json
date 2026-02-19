@@ -68,14 +68,16 @@
       }
     ]
   },
-  "enabledPlugins": {
-    "claude-mem@thedotmack": true,
-    "glm-assistant@local": true
-  },
-  "alwaysThinkingEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
-  }
+  },
+  "enabledPlugins": {
+    "claude-mem@thedotmack": true,
+    "glm-assistant@local": true,
+    "autonomous-skill@claude-code-settings": true,
+    "spec-kit-skill@claude-code-settings": true
+  },
+  "alwaysThinkingEnabled": true,
+  "skipDangerousModePermissionPrompt": true
 }
