@@ -30,6 +30,15 @@ for agent in "$REPO_DIR/agents/"*.md; do
     echo "  ✓ agents/$name"
 done
 
+# Install skills
+echo "[install] skills..."
+mkdir -p "$CLAUDE_DIR/skills"
+for skill in "$REPO_DIR/skills/"*.md; do
+    name=$(basename "$skill")
+    cp "$skill" "$CLAUDE_DIR/skills/$name"
+    echo "  ✓ skills/$name"
+done
+
 # Install settings.json
 echo "[install] settings.json..."
 cp "$REPO_DIR/settings.json" "$CLAUDE_DIR/settings.json"

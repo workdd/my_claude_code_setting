@@ -10,6 +10,15 @@ my_claude_code_setting/
 │   ├── frontend-designer.md       # UI/UX + 프론트엔드 전문 에이전트
 │   ├── backend.md                 # 백엔드 API/서버 전문 에이전트
 │   └── researcher.md              # 기술 리서치 + 문서화 전문 에이전트
+├── skills/                        # Anthropic 공식 Skills (agents에서 참조)
+│   ├── frontend-design.md         # 프로덕션급 UI 설계 가이드
+│   ├── web-artifacts-builder.md   # React+Vite+Tailwind HTML 아티팩트 빌더
+│   ├── canvas-design.md           # PNG/PDF 비주얼 디자인
+│   ├── webapp-testing.md          # Playwright 웹앱 테스트
+│   ├── mcp-builder.md             # MCP 서버 개발 가이드
+│   ├── pdf.md                     # PDF 처리 (pypdf, pdfplumber, reportlab)
+│   ├── docx.md                    # Word 문서 처리
+│   └── xlsx.md                    # Excel 스프레드시트 처리
 ├── plugins/
 │   └── glm-assistant/             # 로컬 MCP 플러그인 (GLM-4.5-Air 무료 모델)
 │       ├── server.py              # MCP 서버 구현
@@ -47,6 +56,19 @@ cp settings.json ~/.claude/settings.json
 # 전역 지침 설치 (홈 디렉토리에 배치)
 cp CLAUDE.md ~/CLAUDE.md
 ```
+
+## 에이전트 & Skills 매핑
+
+| 에이전트 | 등록된 Skills |
+|----------|--------------|
+| `frontend-designer` | `frontend-design`, `web-artifacts-builder`, `canvas-design`, `webapp-testing` |
+| `backend` | `mcp-builder` |
+| `researcher` | `pdf`, `docx`, `xlsx` |
+
+Skills는 `~/.claude/skills/`에 설치되며, 각 에이전트 실행 시 자동으로 컨텍스트에 주입됩니다.
+출처: [anthropics/skills](https://github.com/anthropics/skills)
+
+---
 
 ## 에이전트 설명
 
