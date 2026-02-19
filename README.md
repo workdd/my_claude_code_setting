@@ -10,7 +10,12 @@ my_claude_code_setting/
 │   ├── frontend-designer.md       # UI/UX + 프론트엔드 전문 에이전트
 │   ├── backend.md                 # 백엔드 API/서버 전문 에이전트
 │   └── researcher.md              # 기술 리서치 + 문서화 전문 에이전트
-├── settings.json                  # Claude Code 전역 설정 (hooks, permissions, model)
+├── plugins/
+│   └── glm-assistant/             # 로컬 MCP 플러그인 (GLM-4.5-Air 무료 모델)
+│       ├── server.py              # MCP 서버 구현
+│       ├── .mcp.json              # MCP 서버 설정 (API 키 환경변수 참조)
+│       └── requirements.txt       # Python 의존성
+├── settings.json                  # Claude Code 전역 설정 (hooks, permissions, plugins)
 ├── CLAUDE.md                      # 전역 Claude 지침 (홈 디렉토리에 배치)
 ├── install.sh                     # 자동 설치 스크립트
 └── .gitignore
@@ -69,6 +74,40 @@ UI/UX 디자인 및 프론트엔드 개발 전문 에이전트.
 - ADR (Architecture Decision Record) 작성
 - Obsidian 형식 기술 문서 자동 생성
 - 기술 트렌드 및 경쟁사 분석
+
+## 플러그인 설치
+
+### claude-mem (크로스 세션 메모리) - 마켓플레이스
+
+Claude Code 세션 간 기억을 유지하는 플러그인. `settings.json`의 `enabledPlugins`에 이미 포함. 별도 설치 필요.
+
+```bash
+# Claude Code 내에서 실행
+/plugin install claude-mem@thedotmack
+```
+
+### glm-assistant (무료 GLM 모델) - 로컬 MCP 플러그인
+
+토큰 절약용 GLM-4.5-Air 무료 모델 연동 플러그인. `install.sh` 실행 시 자동 설치됨.
+
+**수동 설치:**
+```bash
+mkdir -p ~/.claude/plugins/local/glm-assistant
+cp plugins/glm-assistant/* ~/.claude/plugins/local/glm-assistant/
+pip install -r plugins/glm-assistant/requirements.txt
+
+# API 키 설정 (https://openrouter.ai 에서 무료 발급)
+export OPENROUTER_API_KEY=sk-or-...
+```
+
+**제공 도구 (MCP):**
+- `ask_glm` - 일반 질문 (번역, 요약, 설명)
+- `ask_glm_code` - 코드 리뷰, 버그 분석
+- `ask_glm_quick` - 빠른 단답 (2-3문장 이내)
+
+> `zai-org/glm-4.5-air:free` 모델을 OpenRouter를 통해 무료로 사용합니다.
+
+---
 
 ## 선택 설치: peon-ping 사운드 알림
 

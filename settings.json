@@ -68,6 +68,10 @@
       }
     ]
   },
+  "enabledPlugins": {
+    "claude-mem@thedotmack": true,
+    "glm-assistant@local": true
+  },
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true
 }

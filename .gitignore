@@ -18,3 +18,11 @@ Thumbs.db
 
 # peon-ping sound packs (large binary files - install separately)
 hooks/peon-ping/packs/
+
+# Plugin node_modules and cache (install via Claude Code plugin system)
+plugins/marketplaces/
+plugins/cache/
+
+# Never commit API keys
+plugins/**/.env
+plugins/**/api-keys*
