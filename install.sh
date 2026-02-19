@@ -66,6 +66,12 @@ echo ""
 echo "  [!] API 키 설정 필요 (~/.api-keys.env 또는 환경변수):"
 echo "      export OPENROUTER_API_KEY=sk-or-..."
 
+# Install statusline script
+echo "[install] statusline.sh..."
+cp "$REPO_DIR/statusline.sh" "$CLAUDE_DIR/statusline.sh"
+chmod +x "$CLAUDE_DIR/statusline.sh"
+echo "  ✓ ~/.claude/statusline.sh"
+
 # Install tmux config
 echo "[install] tmux config..."
 if [ -f "$HOME/.tmux.conf" ]; then
