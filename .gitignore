@@ -1,0 +1,20 @@
+# Claude Code runtime data (don't version control)
+todos/
+shell-snapshots/
+statsig/
+projects/
+config/
+
+# API keys and secrets - NEVER commit these
+.env
+*.env
+api-keys*
+*secret*
+*credentials*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# peon-ping sound packs (large binary files - install separately)
+hooks/peon-ping/packs/
