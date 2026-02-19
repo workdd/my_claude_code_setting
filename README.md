@@ -59,14 +59,21 @@ cp CLAUDE.md ~/CLAUDE.md
 
 ## 에이전트 & Skills 매핑
 
-| 에이전트 | 등록된 Skills |
-|----------|--------------|
-| `frontend-designer` | `frontend-design`, `web-artifacts-builder`, `canvas-design`, `webapp-testing` |
-| `backend` | `mcp-builder` |
-| `researcher` | `pdf`, `docx`, `xlsx` |
+| 에이전트 | Skills (anthropics) | Skills (jeffallan) |
+|----------|--------------------|--------------------|
+| `frontend-designer` | `frontend-design`, `web-artifacts-builder`, `canvas-design`, `webapp-testing` | `react-expert`, `nextjs-developer`, `typescript-pro`, `playwright-expert`, `vue-expert`, `javascript-pro` |
+| `backend` | `mcp-builder` | `fastapi-expert`, `nestjs-expert`, `api-designer`, `postgres-pro`, `python-pro`, `graphql-architect`, `microservices-architect`, `secure-code-guardian`, `test-master` |
+| `researcher` | `pdf`, `docx`, `xlsx` | `spec-miner`, `code-documenter`, `architecture-designer`, `the-fool` |
 
-Skills는 `~/.claude/skills/`에 설치되며, 각 에이전트 실행 시 자동으로 컨텍스트에 주입됩니다.
-출처: [anthropics/skills](https://github.com/anthropics/skills)
+Skills 출처:
+- [anthropics/skills](https://github.com/anthropics/skills) - `skills/` 디렉토리에 포함 (자동 설치)
+- [Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills) - 플러그인으로 별도 설치 필요
+
+```bash
+# jeffallan skills 설치 (Claude Code 내에서)
+/plugin marketplace add jeffallan/claude-skills
+/plugin install fullstack-dev-skills@jeffallan
+```
 
 ---
 
