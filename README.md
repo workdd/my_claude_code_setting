@@ -211,6 +211,34 @@ export OPENROUTER_API_KEY=sk-or-...
 
 > `zai-org/glm-4.5-air:free` 모델을 OpenRouter를 통해 무료로 사용합니다.
 
+### notebooklm-mcp (NotebookLM 연동) - MCP 서버
+
+Google NotebookLM과 AI 에이전트를 직접 연결하는 MCP 서버. 문서를 NotebookLM에 업로드하면 에이전트가 직접 질의하여 hallucination 없는 답변을 받습니다.
+
+**설치:**
+```bash
+claude mcp add notebooklm npx notebooklm-mcp@latest
+```
+
+**최초 인증:**
+```
+"Log me in to NotebookLM"
+```
+Chrome 창에서 Google 계정 로그인 후 자동 인증.
+
+**사용 방법:**
+1. [notebooklm.google.com](https://notebooklm.google.com)에서 노트북 생성 후 문서 업로드
+2. 공유 링크 복사 (Anyone with link)
+3. Claude에게 링크 전달: `"이 NotebookLM 참고해서 작업해줘: [link]"`
+
+**주요 특징:**
+- Zero-hallucination: NotebookLM이 모르면 거부 (추측 없음)
+- Citation-backed: 모든 답변에 출처 포함
+- 멀티소스 종합: 50+ 문서 간 정보 연결
+- 토큰 절약: 문서를 직접 읽지 않고 NotebookLM에 질의
+
+> GitHub: [PleasePrompto/notebooklm-mcp](https://github.com/PleasePrompto/notebooklm-mcp)
+
 ---
 
 ## 선택 설치: peon-ping 사운드 알림
