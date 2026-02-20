@@ -224,6 +224,41 @@ curl -fsSL https://raw.githubusercontent.com/mbrock/peon-ping/main/install.sh | 
 
 `settings.json`의 hooks가 `peon-ping`을 참조하므로, 사용하지 않으려면 hooks 섹션을 제거하세요.
 
+
+## 선택 설치: AgentBar AI 사용량 트래킹
+
+macOS 메뉴바에서 여러 AI 코딩 어시스턴트의 사용량을 통합 모니터링하는 앱.
+
+**지원 서비스:**
+- Claude Code (Anthropic OAuth API, Keychain 저장)
+- OpenAI Codex (로컬 세션 로그)
+- Google Gemini (로컬 로그 파일)
+- GitHub Copilot (GitHub Copilot API)
+- Cursor (Cursor API + 로컬 DB)
+- Z.ai (Z.ai quota API)
+
+**주요 기능:**
+- 메뉴바에 서비스별 사용량 바 표시 (사용량 순 정렬)
+- 상세 사용량 팝오버 (서비스별 메트릭)
+- 데스크톱 알림 (에이전트 이벤트)
+- 커스텀 사운드 팩 지원
+
+**설치 방법:**
+```bash
+# GitHub Releases에서 최신 DMG 다운로드 및 자동 설치
+gh release download -R scari/AgentBar -p "*.dmg" -D ~/Downloads
+open ~/Downloads/AgentBar.dmg
+# AgentBar.app을 Applications 폴더로 드래그
+```
+
+**또는 자동 설치 (install.sh 사용):**
+```bash
+./install.sh --agentbar
+```
+
+> API 키는 macOS Keychain을 통해 안전하게 관리됩니다.
+
+
 ## settings.json 주요 설정
 
 | 설정 | 값 | 설명 |
