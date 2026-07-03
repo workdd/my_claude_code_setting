@@ -56,6 +56,8 @@ my_claude_code_setting/
 │       ├── server.py              # MCP 서버 구현
 │       ├── .mcp.json              # MCP 서버 설정 (API 키 환경변수 참조)
 │       └── requirements.txt       # Python 의존성
+├── mcp/
+│   └── open-design.json           # Open Design 로컬 MCP 설정 (OD_DATA_DIR은 $HOME로 일반화)
 ├── tmux/
 │   └── tmux.conf                  # tmux 설정 (Shift+Enter, prefix=C-a, TPM 등)
 ├── statusline.sh                  # 상태바 스크립트 (모델/git/컨텍스트/비용 표시)
@@ -187,6 +189,7 @@ Claude Code 세션 간 기억을 유지하는 플러그인. `settings.json`의 `
 
 ```bash
 # Claude Code 내에서 실행
+/plugin marketplace add thedotmack/claude-mem
 /plugin install claude-mem@thedotmack
 ```
 
@@ -241,6 +244,79 @@ Chrome 창에서 Google 계정 로그인 후 자동 인증.
 
 ---
 
+## 추가 플러그인·스킬 (2026-07 갱신)
+
+파일을 벤더링하지 않고 **설치 방법만 문서화**한 항목입니다. 각 도구의 원본 저장소를 단일 진실 원천으로 두어 자동 업데이트를 받습니다.
+
+### 마켓플레이스 플러그인
+
+```bash
+# 사용량 대시보드 상태줄 (Claude/Codex/Gemini 한도 추적)
+/plugin marketplace add uppinote20/claude-dashboard
+/plugin install claude-dashboard@claude-dashboard
+
+# Anthropic 공식 마켓플레이스
+/plugin marketplace add anthropics/claude-plugins-official
+/plugin install frontend-design@claude-plugins-official   # 프론트엔드 디자인 가이드
+/plugin install superpowers@claude-plugins-official        # make-plan/do 등 확장 스킬 번들
+```
+
+| 플러그인 | 마켓플레이스 | 역할 |
+|----------|-------------|------|
+| `claude-dashboard` | uppinote20/claude-dashboard | 상태줄에 AI CLI 사용량·한도 표시, `/check-usage` |
+| `frontend-design` | anthropics/claude-plugins-official | 프론트엔드 비주얼 디자인 가이드 |
+| `superpowers` | anthropics/claude-plugins-official | make-plan·do·design-is·pathfinder 등 워크플로우 스킬 |
+
+### Cloudflare 스킬군 (선택)
+
+`wrangler`, `cloudflare`, `durable-objects`, `workers-best-practices`, `agents-sdk`, `sandbox-sdk`, `cloudflare-one`(+`migrations`), `cloudflare-email-service`, `web-perf`, `turnstile-spin` — Cloudflare 공식 스킬 저장소를 마켓플레이스로 add 후 필요한 스킬만 install 합니다. Workers/Pages/D1/R2/KV 작업 시 문서를 우선 참조하도록 편향됩니다.
+
+### 독립 도구
+
+| 도구 | 설치 | 비고 |
+|------|------|------|
+| `peon-ping` | `curl -fsSL https://raw.githubusercontent.com/mbrock/peon-ping/main/install.sh \| bash` | `settings.json` 훅이 참조 |
+| `last30days` | [mvanhorn/last30days-skill](https://github.com/mvanhorn/last30days-skill) (npm skills CLI) | 최근 30일 소셜/웹 리서치. Python 3.12+ 필요 |
+| `agentcat` | AgentCat 커넥터 설치 | `~/.local/bin/agentcat` 훅이 참조, 사용량 커넥터 |
+
+### humanize-korean 툴킷 (별도 저장소)
+
+AI가 쓴 한글 텍스트의 "AI 티"를 제거하는 윤문 파이프라인. 스킬 3종(`humanize`, `humanize-korean`, `humanize-redo`)과 서브에이전트 12종으로 구성됩니다. **독립 저장소를 clone 후 자체 install.sh로 심볼릭 링크를 생성**합니다 (벤더링하지 않음).
+
+```bash
+git clone https://github.com/epoko77-ai/im-not-ai.git ~/programming/im-not-ai
+cd ~/programming/im-not-ai && ./install.sh
+# ~/.claude/skills, ~/.claude/agents 로 심볼릭 링크 생성
+```
+
+| 구성 | 항목 |
+|------|------|
+| 스킬 | `humanize`, `humanize-korean`, `humanize-redo` |
+| 에이전트 | ai-tell-detector, korean-style-rewriter, naturalness-reviewer, content-fidelity-auditor, korean-ai-tell-taxonomist, humanize-monolith 외 6종 |
+
+### Open Design MCP (로컬 디자인 워크스페이스)
+
+로컬 우선(local-first) 디자인 도구 [Open Design](https://opendesign.dev) 앱을 Claude Code에 MCP로 연결합니다. 아티팩트(HTML/JSX/CSS)와 소스 파일을 에이전트가 직접 읽고 수정할 수 있습니다.
+
+설정 원본은 `mcp/open-design.json` 에 있으며, `OD_DATA_DIR` 의 `$HOME` 은 실제 홈 경로로 치환해야 합니다.
+
+**등록 (택 1):**
+```bash
+# 방법 A — Open Design 앱이 자동 생성 (권장)
+open-design mcp install claude
+
+# 방법 B — 저장된 설정으로 수동 등록
+claude mcp add-json open-design "$(sed "s#\$HOME#$HOME#g" mcp/open-design.json)"
+```
+
+**제공 도구(요약):** `get_artifact`, `get_file`, `search_files`, `list_projects`, `create_artifact`, `write_file` 등. 사용자가 OD에서 열어둔 프로젝트/파일이 기본 컨텍스트가 됩니다.
+
+> ⚠️ 이 MCP는 **로컬 데스크톱 앱 종속**입니다. Open Design 앱이 `/Applications` 에 설치돼 있고 데몬이 실행 중이어야 동작합니다. 다른 머신에서는 앱 설치 후 방법 A로 재등록하세요.
+
+> 참고 — 이 저장소에서 **의도적으로 제외한 MCP**: `atlassian`(Jira/Confluence), `bitbucket`. 사내 연동으로 보안상 포함하지 않습니다.
+
+---
+
 ## 선택 설치: peon-ping 사운드 알림
 
 Claude Code 이벤트(시작, 완료, 알림)에 게임 사운드 효과를 추가하는 훅.
@@ -291,13 +367,19 @@ open ~/Downloads/AgentBar.dmg
 
 | 설정 | 값 | 설명 |
 |------|-----|------|
-| `model` | `sonnet` | 기본 모델 |
 | `alwaysThinkingEnabled` | `true` | 확장 사고 항상 활성화 |
+| `effortLevel` | `high` | 추론 강도 |
+| `theme` | `dark` | 다크 테마 |
 | `skipDangerousModePermissionPrompt` | `true` | 위험 작업 확인 프롬프트 생략 |
-| `permissions.allow` | `["Bash(pkill:*)", "Bash(git commit:*)"]` | 자동 허용 커맨드 |
-| `statusLine` | `~/.claude/statusline.sh` | 하단 상태바: 모델·git·컨텍스트·비용·시간 표시 |
+| `permissions.defaultMode` | `bypassPermissions` | 권한 프롬프트 기본 우회 |
+| `permissions.allow` | `["Bash(git commit:*)", "Bash(pkill:*)"]` | 자동 허용 커맨드 |
+| `env.CLAUDE_CODE_DISABLE_AUTO_MEMORY` | `1` | 자동 메모리 주입 비활성화 |
+| `statusLine` | `~/.claude/statusline.sh` | 하단 상태바 (claude-dashboard 설치 시 전환 가능) |
+| `enabledPlugins` | claude-mem, claude-dashboard, frontend-design, superpowers, glm-assistant | 활성 플러그인 |
 
-> ⚠️ `skipDangerousModePermissionPrompt: true`는 개인 환경용 설정입니다. 공유 환경에서는 `false`로 변경 권장.
+> ⚠️ `skipDangerousModePermissionPrompt: true` 와 `defaultMode: bypassPermissions` 는 개인 환경용 공격적 설정입니다. 공유·팀 환경에서는 각각 `false` / `default` 로 변경 권장.
+
+> 훅은 전 이벤트에 `peon-ping` 사운드와 `agentcat` 사용량 커넥터를 연결합니다. 두 도구를 설치하지 않으면 해당 훅은 조용히 무시됩니다(경로만 참조).
 
 ## tmux 설정
 

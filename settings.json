@@ -1,11 +1,14 @@
 {
+  "env": {
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
   "permissions": {
     "allow": [
-      "Bash(pkill:*)",
-      "Bash(git commit:*)"
-    ]
+      "Bash(git commit:*)",
+      "Bash(pkill:*)"
+    ],
+    "defaultMode": "bypassPermissions"
   },
-  "model": "sonnet",
   "hooks": {
     "SessionStart": [
       {
@@ -17,6 +20,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.local/bin/agentcat claude-hook --event SessionStart",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
@@ -26,7 +39,33 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/peon-ping/scripts/hook-handle-use.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/peon-ping/scripts/hook-handle-rename.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.local/bin/agentcat claude-hook --event UserPromptSubmit",
+            "timeout": 5
           }
         ]
       }
@@ -38,7 +77,18 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.local/bin/agentcat claude-hook --event Stop",
+            "timeout": 5
           }
         ]
       }
@@ -50,7 +100,8 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10
+            "timeout": 10,
+            "async": true
           }
         ]
       }
@@ -62,7 +113,86 @@
           {
             "type": "command",
             "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
           }
         ]
       }
@@ -74,10 +204,21 @@
   },
   "enabledPlugins": {
     "claude-mem@thedotmack": true,
-    "glm-assistant@local": true,
-    "autonomous-skill@claude-code-settings": true,
-    "spec-kit-skill@claude-code-settings": true
+    "claude-dashboard@claude-dashboard": true,
+    "frontend-design@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "glm-assistant@local": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-dashboard": {
+      "source": {
+        "source": "github",
+        "repo": "uppinote20/claude-dashboard"
+      }
+    }
   },
   "alwaysThinkingEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "effortLevel": "high",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark"
 }
