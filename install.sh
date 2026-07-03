@@ -72,6 +72,18 @@ cp "$REPO_DIR/statusline.sh" "$CLAUDE_DIR/statusline.sh"
 chmod +x "$CLAUDE_DIR/statusline.sh"
 echo "  ✓ ~/.claude/statusline.sh"
 
+# Install cmux config (JSONC template)
+if [ -f "$REPO_DIR/cmux/cmux.json" ]; then
+    echo "[install] cmux config..."
+    mkdir -p "$HOME/.config/cmux"
+    if [ -f "$HOME/.config/cmux/cmux.json" ]; then
+        cp "$HOME/.config/cmux/cmux.json" "$HOME/.config/cmux/cmux.json.backup.$(date +%Y%m%d_%H%M%S)"
+        echo "  (backup created)"
+    fi
+    cp "$REPO_DIR/cmux/cmux.json" "$HOME/.config/cmux/cmux.json"
+    echo "  ✓ ~/.config/cmux/cmux.json"
+fi
+
 # Install tmux config
 echo "[install] tmux config..."
 if [ -f "$HOME/.tmux.conf" ]; then

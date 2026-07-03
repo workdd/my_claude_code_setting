@@ -58,6 +58,8 @@ my_claude_code_setting/
 │       └── requirements.txt       # Python 의존성
 ├── mcp/
 │   └── open-design.json           # Open Design 로컬 MCP 설정 (OD_DATA_DIR은 $HOME로 일반화)
+├── cmux/
+│   └── cmux.json                  # cmux(AI 에이전트 병렬 터미널) JSONC 설정 템플릿
 ├── tmux/
 │   └── tmux.conf                  # tmux 설정 (Shift+Enter, prefix=C-a, TPM 등)
 ├── statusline.sh                  # 상태바 스크립트 (모델/git/컨텍스트/비용 표시)
@@ -411,6 +413,36 @@ tmux
 # prefix + I (대문자)
 ```
 
+## cmux 설정 (AI 에이전트 병렬 터미널)
+
+[cmux](https://github.com/manaflow-ai/cmux)는 여러 AI 코딩 에이전트(Claude Code/Codex/Gemini)를 워크스페이스별로 나눠 병렬 실행하는 macOS 터미널 앱입니다. Claude Code 세션과 통합되어 사이드바에서 브랜치·PR·포트·진행 상태를 함께 봅니다.
+
+설정 파일은 **JSONC(주석 포함 JSON)** 형식이며 `cmux/cmux.json` → `~/.config/cmux/cmux.json` 에 설치됩니다 (`install.sh` 자동 처리). 저장소에 포함된 파일은 **모든 옵션이 주석으로 문서화된 기본 템플릿**으로, 원하는 항목의 주석을 해제하면 파일 관리(file-managed) 설정이 됩니다. 주석을 지우면 앱 Settings(GUI)에 저장된 값으로 폴백합니다.
+
+```bash
+# 앱 설치 (Homebrew 또는 릴리스 DMG)
+brew install --cask cmux            # 또는 https://github.com/manaflow-ai/cmux 릴리스
+
+# 설정 템플릿 배치 (install.sh가 자동 처리)
+mkdir -p ~/.config/cmux
+cp cmux/cmux.json ~/.config/cmux/cmux.json
+```
+
+### 파일로 관리할 만한 주요 옵션
+
+| 섹션 | 키 | 설명 |
+|------|-----|------|
+| `automation` | `claudeCodeIntegration` | Claude Code 세션 통합 (기본 true) |
+| `automation` | `portBase` / `portRange` | 워크스페이스 포트 할당 시작·범위 |
+| `automation` | `suppressSubagentNotifications` | 서브에이전트 알림 억제 |
+| `terminal` | `autoResumeAgentSessions` | 재시작 시 에이전트 세션 자동 복원 |
+| `notifications` | `hooksMode` / `hooks` | 알림 훅 (append/replace) |
+| `shortcuts.bindings` | (전체) | 키바인딩 재정의 |
+
+> 앱의 실제 사용 상태(워크스페이스·세션)는 `~/Library/Application Support/com.cmuxterm.app` 에 저장되며 버전관리 대상이 아닙니다. 이 저장소는 재현 가능한 **설정 템플릿만** 관리합니다.
+
+> 참고 — 커밋된 템플릿의 `automation.socketPassword` 는 빈 값입니다. 소켓 제어에 비밀번호를 쓰더라도 **절대 이 파일에 평문으로 커밋하지 마세요.**
+
 ---
 
 ## API 키 관리
@@ -429,24 +461,51 @@ source ~/.api-keys.env
 
 ## 업데이트
 
-새 환경에서 최신 설정 동기화:
+이 저장소는 파일을 벤더링하는 대신 **설치 방법을 문서화**하는 항목이 많습니다. 따라서 업데이트는 ⓐ 저장소 파일 동기화와 ⓑ 외부 도구 각자 업데이트, 두 축으로 나뉩니다.
+
+### 1. 저장소 파일 동기화 (새 환경 or 최신 반영)
 
 ```bash
 cd my_claude_code_setting
 git pull
-./install.sh
+./install.sh          # settings/agents/skills/plugins/mcp/cmux/tmux 재설치
 ```
 
-로컬 변경사항을 레포에 반영:
+### 2. 외부 도구·플러그인 업데이트
+
+```bash
+# 마켓플레이스 플러그인 (Claude Code 내에서)
+/plugin marketplace update thedotmack            # claude-mem
+/plugin marketplace update uppinote20/claude-dashboard
+/plugin marketplace update anthropics/claude-plugins-official   # frontend-design, superpowers
+
+# humanize-korean 툴킷 (별도 저장소)
+cd ~/programming/im-not-ai && git pull && ./update.sh   # 없으면 ./install.sh
+
+# 독립 도구
+#   peon-ping : install.sh 재실행
+#   cmux      : brew upgrade --cask cmux (또는 앱 내 자동 업데이트)
+#   Open Design : 앱 자동 업데이트 후 필요 시 `open-design mcp install claude` 재등록
+```
+
+### 3. 로컬 변경사항을 저장소에 역반영
 
 ```bash
 cd my_claude_code_setting
 
-# 에이전트 수정 후 동기화
-cp ~/.claude/agents/*.md agents/
+# 실제로 편집한 것만 골라 동기화
+cp ~/.claude/agents/{backend,frontend-designer,researcher}.md agents/
 cp ~/.claude/settings.json settings.json
+cp ~/.config/cmux/cmux.json cmux/cmux.json
+
+# ⚠️ 커밋 전 필수 — 민감정보 스캔
+grep -rniE 'okestro|sk-[a-zA-Z0-9]|/Users/[a-z]+|atlassian|bitbucket|jira|confluence' \
+  --exclude-dir=.git . && echo "누출 검토 필요!" || echo "클린"
+# settings.json은 절대경로를 $HOME 으로 치환하고, 사내 훅(weekly-summary 등)을 제거한 뒤 커밋
 
 git add -A
-git commit -m "feat: 에이전트 업데이트"
+git commit -m "feat: 설정 업데이트"
 git push
 ```
+
+> ⚠️ **역반영 시 재발 주의** — `~/.claude/settings.json` 원본에는 사내 `weekly-summary` 훅과 절대경로가 다시 들어있습니다. 그대로 덮어쓰지 말고 위 스캔·치환을 거친 뒤 커밋하세요. `atlassian`·`bitbucket` MCP, `oke-jira-*` 스킬은 계속 제외 대상입니다.
